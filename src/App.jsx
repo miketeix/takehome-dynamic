@@ -1,33 +1,16 @@
 import { useEffect, useState } from "react";
 import clone from "rfdc/default";
+import { sample } from "lodash";
+
 import "./App.css";
-const allowedSymbols = [
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "0",
-  "*",
-  "-",
-  "+",
-  "/",
-];
+import { generateNewGrid } from "./utils";
+import { allowedSymbols, expressions } from "./utils/constants";
+
 function App() {
   const [currentRow, setCurrentRow] = useState(0);
-  const [answerGrid, setAnswerGrid] = useState(
-    new Array(6).fill(
-      new Array(6).fill({
-        symbol: "",
-        correctSymbol: false,
-        correctPlacement: false,
-      })
-    )
-  );
+  const [correctAnswer, setCorrectAnswer] = useState(sample(expressions));
+
+  const [answerGrid, setAnswerGrid] = useState(generateNewGrid());
   const handleSymbolInput = (row, column, event) => {
     const symbol = event.target.value;
     if (symbol !== "" && !allowedSymbols.includes(symbol)) return;
