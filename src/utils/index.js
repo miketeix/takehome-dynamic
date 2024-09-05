@@ -1,6 +1,7 @@
+import { gridSize } from "./constants";
 export const generateNewGrid = () =>
-  new Array(6).fill(
-    new Array(6).fill({
+  new Array(gridSize).fill(
+    new Array(gridSize).fill({
       symbol: "",
       correctSymbol: false,
       correctPlacement: false,
