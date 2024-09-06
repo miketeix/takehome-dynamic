@@ -8,6 +8,7 @@ import { generateNewGrid } from "./utils";
 import { allowedSymbols, expressions, gridSize } from "./utils/constants";
 
 function App() {
+  const [showHint, setShowHint] = useState(false);
   const [currentRowIndex, setCurrentRowIndex] = useState(0);
   const [correctExpression, _] = useState(sample(expressions));
   const correctEvaluation = useMemo(
@@ -89,6 +90,22 @@ function App() {
         Guess the expression that evaluates to:{" "}
         <span className="font-black">{correctEvaluation} </span>
       </h2>
+      <div className="mb-[20px]">
+        <button
+          onMouseDown={() => setShowHint(true)}
+          onMouseUp={() => setShowHint(false)}
+        >
+          Show Hint
+        </button>
+        <p
+          className={`text-[20px] transition-all ${
+            showHint ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {correctExpression}
+        </p>
+      </div>
+
       <div>
         {answerGrid.map((row, i) => (
           <div
