@@ -55,6 +55,7 @@ function App() {
       if (currentRow[i].symbol === validExpression.charAt(i)) {
         tempGrid[currentRowIndex][i].correctPlacement = true;
         tempGrid[currentRowIndex][i].correctSymbol = true;
+        tempGrid[currentRowIndex + 1][i].symbol = currentRow[i].symbol;
       } else if (validExpression.includes(currentRow[i].symbol)) {
         const areAllDuplicatesCorrectlyPlaced = validExpression
           .split("")
