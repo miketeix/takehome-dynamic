@@ -85,31 +85,12 @@ function App() {
 
   return (
     <>
-      <h1 className="text-7xl sm:text-xl">Mathler</h1>
-      <h2 className="text-3xl sm:text-lg">
+      <h1 className="text-4xl sm:text-7xl">Mathler</h1>
+      <h2 className="text-lg sm:text-3xl mt-2">
         Guess the expression that evaluates to:{" "}
         <span className="font-black">{correctEvaluation} </span>
       </h2>
-      <div className="mb-[20px]">
-        <button
-          onMouseDown={() => setShowHint(true)}
-          onMouseUp={() => setShowHint(false)}
-          onTouchStart={() => setShowHint(true)}
-          onTouchEnd={() => setShowHint(false)}
-          className={`text-lg sm:text-s`}
-        >
-          Show Hint
-        </button>
-        <p
-          className={`text-lg sm:text-sm  transition-all ${
-            showHint ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          {correctExpression}
-        </p>
-      </div>
-
-      <div className="aspect-square">
+      <div className="aspect-square mt-4">
         {answerGrid.map((row, i) => (
           <div
             key={i}
@@ -120,7 +101,7 @@ function App() {
             {row.map((answer, j) => (
               <div
                 key={j}
-                className={`m-5 color-black w-1/${gridSize} aspect-square`}
+                className={`m-1 sm:m-5 color-black w-1/${gridSize} aspect-square`}
               >
                 <input
                   id={`symbol${i.toString()}${j.toString()}`}
@@ -130,7 +111,7 @@ function App() {
                       : answer.correctSymbol
                       ? "bg-yellow-800"
                       : "bg-black"
-                  } text-white text-8xl sm:text-md text-center align-middle w-full h-full`}
+                  } text-white text-3xl sm:text-8xl text-center align-middle w-full h-full`}
                   maxLength="1"
                   type="text"
                   value={answer.symbol}
@@ -141,6 +122,28 @@ function App() {
             ))}
           </div>
         ))}
+      </div>
+      <div className="mb-[20px] mt-4 m-auto flex flex-col align-middle justify-center">
+        <p
+          className={`text-lg sm:text-3xl mb-5 transition-all ${
+            showHint ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {correctExpression.split("").map((symbol, i) => (
+            <span className="mr-5 last:mr-0 align-middle" key={i}>
+              {symbol}
+            </span>
+          ))}
+        </p>
+        <button
+          onMouseDown={() => setShowHint(true)}
+          onMouseUp={() => setShowHint(false)}
+          onTouchStart={() => setShowHint(true)}
+          onTouchEnd={() => setShowHint(false)}
+          className={`text-sm sm:text-lg max-w-[200px] m-auto`}
+        >
+          Show Hint
+        </button>
       </div>
     </>
   );
