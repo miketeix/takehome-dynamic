@@ -1,10 +1,11 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo } from "react";
 import clone from "rfdc/default";
 import stringMath from "string-math";
+
 import { sample } from "lodash";
 
 import "./App.css";
-import { generateNewGrid } from "./utils";
+import { generateNewGrid, evaluateAnswerGrid } from "./utils";
 import { allowedSymbols, expressions, gridSize } from "./utils/constants";
 
 function App() {
@@ -33,56 +34,27 @@ function App() {
       .focus();
   };
 
-  const evaluateAnswer = useCallback(() => {
-    const tempGrid = clone(answerGrid);
-    const currentRow = tempGrid[currentRowIndex];
-    const answerString = currentRow.reduce(
-      (acc, { symbol }) => acc.concat(symbol),
-      ""
-    );
-    const evaluatedAnswer = stringMath(answerString);
-    let validExpression = correctExpression;
-
-    // account for expressions that are cumulatively equivalent
-    if (
-      evaluatedAnswer === correctEvaluation &&
-      answerString !== correctExpression
-    ) {
-      validExpression = answerString;
-    }
-
-    for (let i = 0; i < currentRow.length; i++) {
-      if (currentRow[i].symbol === validExpression.charAt(i)) {
-        tempGrid[currentRowIndex][i].correctPlacement = true;
-        tempGrid[currentRowIndex][i].correctSymbol = true;
-        tempGrid[currentRowIndex + 1][i].symbol = currentRow[i].symbol;
-      } else if (validExpression.includes(currentRow[i].symbol)) {
-        const areAllDuplicatesCorrectlyPlaced = validExpression
-          .split("")
-          .every((symbol, index) => {
-            if (symbol === currentRow[index].symbol) {
-              return symbol === currentRow[index].symbol;
-            }
-            return true;
-          });
-        if (!areAllDuplicatesCorrectlyPlaced) {
-          tempGrid[currentRowIndex][i].correctSymbol = true;
-        }
-      }
-    }
-
-    setAnswerGrid(tempGrid);
-  }, [answerGrid, correctEvaluation, correctExpression, currentRowIndex]);
-
   useEffect(() => {
     const rowAnswered = answerGrid[currentRowIndex].every((answer) => {
       return !!answer.symbol;
     });
     if (rowAnswered) {
-      evaluateAnswer();
+      const updatedGrid = evaluateAnswerGrid(
+        answerGrid,
+        correctEvaluation,
+        correctExpression,
+        currentRowIndex
+      );
+      setAnswerGrid(updatedGrid);
       setCurrentRowIndex(currentRowIndex + 1);
     }
-  }, [currentRowIndex, answerGrid, setAnswerGrid, evaluateAnswer]);
+  }, [
+    currentRowIndex,
+    answerGrid,
+    setAnswerGrid,
+    correctEvaluation,
+    correctExpression,
+  ]);
 
   return (
     <>
